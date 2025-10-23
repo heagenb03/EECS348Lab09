@@ -38,18 +38,20 @@ int** copyMatrix(int** matrix, int size) {
     return copy; // Return pointer of the copied matrix
 }
 
-void readMatricesFromFile(string filename, int**& matrixA, int**& matrixB, int& size) {
+bool readMatricesFromFile(string filename, int**& matrixA, int**& matrixB, int& size) {
     /* Read matrices from a file
     Args:
         filename (string): name of the file to read
         matrixA (int**&): reference to pointer of matrix A
         matrixB (int**&): reference to pointer of matrix B
         size (int&): reference to the size of the matrices
+    Returns:
+        bool: true if successful, false otherwise
     */
     ifstream infile(filename); // Open file
     if (!infile) { // Check if file opened successfully
         cerr << "Error opening file: " << filename << endl; // Print error message
-        return; // Exit function
+        return false; // Exit function with error
     }
     
     infile >> size; // Read size of matrices
@@ -70,6 +72,7 @@ void readMatricesFromFile(string filename, int**& matrixA, int**& matrixB, int& 
     }
     
     infile.close(); // Close file
+    return true; // Success
 }
 
 void printMatrix(int** matrix, int size) {
@@ -225,7 +228,9 @@ int main() {
     cout << "Enter the filename: "; // Prompt for filename
     cin >> filename; // Read filename from user
     
-    readMatricesFromFile(filename, matrixA, matrixB, size); // Read and print matrices
+    if (!readMatricesFromFile(filename, matrixA, matrixB, size)) { // Read matrices
+        return 1; // Exit with error if file couldn't be read
+    }
     
     cout << "Matrix A:" << endl; // Print header
     printMatrix(matrixA, size);  // Print matrix A
